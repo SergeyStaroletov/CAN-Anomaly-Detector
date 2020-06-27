@@ -8,8 +8,7 @@
 int main(int argc, char *argv[]) {
   QCoreApplication app(argc, argv);
 
-  DataReceiver *d =
-      new ArduinoProxyReceiver(QString("/dev/cu.wchusbserial1410"));
+  DataReceiver *d = new ArduinoProxyReceiver(QString("/dev/ttyUSB0"));
 
   DataReceiverThread drth(d);
   drth.start();
