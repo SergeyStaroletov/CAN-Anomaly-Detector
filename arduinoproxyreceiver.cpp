@@ -124,7 +124,7 @@ CanData ArduinoProxyReceiver::askForNewData() {
 
   do {
     QDateTime timeStartGetting = QDateTime::currentDateTime();
-    QString sendMe;
+    QString sendMe = "";
     QThread::msleep(1);
 
     int runn = 0;
@@ -153,11 +153,11 @@ CanData ArduinoProxyReceiver::askForNewData() {
     } while (timeStartGetting.msecsTo(QDateTime::currentDateTime()) <
              100);  // collect all data for not more than 100ms
 
-    qDebug() << dataRep << "\n";
+    // qDebug() << dataRep << "\n";
     // process data we collected in 100ms period
     // Process data from string like FF 11 22 33 44 55 66 77 88
 
-    QStringList strings = dataRep.split("\n");
+    QStringList strings = sendMe.split("\n");
     for (int s = 0; s < strings.length(); s++) {
       // second: get bytes in array from each line
       QStringList bytes = strings.at(s).split(" ");
