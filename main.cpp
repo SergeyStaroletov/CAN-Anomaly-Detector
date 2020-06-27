@@ -1,3 +1,4 @@
+#include <QCoreApplication>
 #include <QString>
 #include <iostream>
 #include "arduinoproxyreceiver.h"
@@ -5,10 +6,15 @@
 #include "datareceiverthread.h"
 
 int main(int argc, char *argv[]) {
-  DataReceiver *d = new ArduinoProxyReceiver(QString("/dev/ttyUSB0"));
+  QCoreApplication app(argc, argv);
+
+  DataReceiver *d =
+      new ArduinoProxyReceiver(QString("/dev/cu.wchusbserial1410"));
 
   DataReceiverThread drth(d);
 
-  int ok;
-  std::cin >> ok;
+  app.exec();
+
+  // int ok;
+  // std::cin >> ok;
 }

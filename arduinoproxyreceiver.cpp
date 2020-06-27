@@ -5,6 +5,8 @@
 #include <QThread>
 
 void ArduinoProxyReceiver::setup() {
+  QThread::msleep(1000);
+
   qDebug() << "Opening serial...\n";
   serial = new QSerialPort();
   serial->setPortName(port);
@@ -17,7 +19,7 @@ void ArduinoProxyReceiver::setup() {
 
   if (!serial->open(QIODevice::ReadWrite)) {
     qDebug() << "bad serial \n";
-    QCoreApplication::exit();
+    QCoreApplication::quit();
   }
 
   // data to send magic configuration
@@ -34,11 +36,16 @@ void ArduinoProxyReceiver::setup() {
   do {
     QThread::msleep(100);
 
-    // QCoreApplication::processEvents();
+    QCoreApplication::processEvents();
+    // qDebug() << serial->bytesAvailable() << "\n";
+
     if (serial->bytesAvailable() > 30) {
       QByteArray data = serial->readAll();
-      if (data.length() > 0) resp.append(data);
-      outputMsg = QString::fromStdString(resp.toStdString());
+      if (data.length() > 0) {
+        resp.append(data);
+        outputMsg = QString::fromStdString(resp.toStdString());
+        qDebug() << outputMsg << "\n";
+      }
     }
   } while (outputMsg.indexOf("\n") < 0);
 

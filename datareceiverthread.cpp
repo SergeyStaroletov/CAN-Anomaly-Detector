@@ -19,7 +19,7 @@ void DataReceiverThread::runLoop() {
 DataReceiverThread::DataReceiverThread(DataReceiver *receiver) {
   // impl = new std::thread(&DataReceiverThread::runLoop, this);
 
-  // QThread *t = QThread::create(std::bind(&DataReceiverThread::runLoop,
-  // this)); t->start();
-  QtConcurrent::run(this, &DataReceiverThread::runLoop);
+  QThread *t = QThread::create(std::bind(&DataReceiverThread::runLoop, this));
+  t->start();
+  // QtConcurrent::run(this, &DataReceiverThread::runLoop);
 }
