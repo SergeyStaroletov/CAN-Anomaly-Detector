@@ -24,7 +24,8 @@ SOURCES += \
     streamingreceiver.cpp \
     lockers.cpp \
     candumpreceiver.cpp \
-    arduinoproxyreceiver.cpp
+    arduinoproxyreceiver.cpp \
+    cardataprocessorthread.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -39,6 +40,7 @@ HEADERS += \
     streamingreceiver.h \
     lockers.h \
     candumpreceiver.h \
-    arduinoproxyreceiver.h
+    arduinoproxyreceiver.h \
+    cardataprocessorthread.h
 
 INCLUDEPATH += /Users/sergey/Projects/can-utils/include

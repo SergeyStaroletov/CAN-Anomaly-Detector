@@ -13,7 +13,7 @@ class DataReceiverThread : public QThread {
   void run();
 
  public:
-  DataReceiverThread(DataReceiver *receiver);
+  DataReceiverThread(DataReceiver *receiver, CanQueue *dataToProcess);
 };
 
 #endif  // DATARECEIVERTHREAD_H

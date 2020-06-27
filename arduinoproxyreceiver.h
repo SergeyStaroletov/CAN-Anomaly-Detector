@@ -8,8 +8,9 @@
 
 class ArduinoProxyReceiver : public StreamingReceiver {
  public:
-  ArduinoProxyReceiver(const QString &port) {
+  ArduinoProxyReceiver(const QString &port, CanQueue *dataToProcess) {
     this->port = port;
+    this->dataToProcess = dataToProcess;
     setup();
   }
   void setup();
@@ -19,6 +20,7 @@ class ArduinoProxyReceiver : public StreamingReceiver {
  private:
   QString port;
   QSerialPort *serial;
+  CanQueue *dataToProcess;
 };
 
 #endif  // ARDUNOPROXYRECEIVER_H

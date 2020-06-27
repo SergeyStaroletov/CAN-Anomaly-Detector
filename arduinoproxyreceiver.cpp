@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QThread>
 
+#include "lockers.h"
+
 void ArduinoProxyReceiver::setup() {
   QThread::msleep(1000);
 
@@ -75,7 +77,7 @@ void ArduinoProxyReceiver::setup() {
     outputMsg = QString::fromStdString(resp.toStdString());
 
     if (timeStart.secsTo(QDateTime::currentDateTime()) > 5) {
-      outputMsg = "Init fail with timeout. Try again.";
+      outputMsg = "Init failed with timeout. Try again.";
       break;
     }
 
@@ -97,7 +99,6 @@ void ArduinoProxyReceiver::setup() {
  */
 CanData ArduinoProxyReceiver::askForNewData() {
   //
-
   static int nTries;
 
   bool isStopped = false;
@@ -112,7 +113,6 @@ CanData ArduinoProxyReceiver::askForNewData() {
     QByteArray data0 = serial->readAll();
     if (data0.length() > 0) data.append(data0);
     dataRep = QString::fromStdString(data.toStdString());
-    // qDebug() << dataRep << "\n";
     indexOf = dataRep.indexOf("\n");
   } while (indexOf < 0);
 
@@ -154,10 +154,45 @@ CanData ArduinoProxyReceiver::askForNewData() {
              100);  // collect all data for not more than 100ms
 
     qDebug() << dataRep << "\n";
-    // send signal with data collected in 100ms period
+    // process data we collected in 100ms period
+    // Process data from string like FF 11 22 33 44 55 66 77 88
+
+    QStringList strings = dataRep.split("\n");
+    for (int s = 0; s < strings.length(); s++) {
+      // second: get bytes in array from each line
+      QStringList bytes = strings.at(s).split(" ");
+      int count = (bytes.length() <= 9) ? bytes.length() : 9;
+
+      unsigned short converted[9];
+      CanData can;
+
+      // convert to normal chars
+      int realCount = 0;
+      for (int i = 0; i < count; i++) {
+        QString oneByteHex = bytes.at(i);
+
+        bool bStatus = false;
+        uint nHex = oneByteHex.toUInt(&bStatus, 16);
+        if (!bStatus) continue;
+
+        converted[realCount++] = (unsigned short)nHex;
+        can.push_back((unsigned short)nHex);
+      }
+      count = realCount;
+
+      if (count == 0) continue;  // skip ""
+
+      Lockers::monitor.lock();
+      this->dataToProcess->push_back(can);
+      Lockers::monitor.unlock();
+    }
+    // notify
+    Lockers::notifier = true;
+    Lockers::cond_var.notify_one();
 
   } while (!isStopped);
 
+  // stub
   CanData d;
   return d;
 }
