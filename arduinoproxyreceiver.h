@@ -8,7 +8,10 @@
 
 class ArduinoProxyReceiver : public StreamingReceiver {
  public:
-  ArduinoProxyReceiver(const QString &port) { this->port = port; }
+  ArduinoProxyReceiver(const QString &port) {
+    this->port = port;
+    setup();
+  }
   void setup();
   CanData askForNewData();
   virtual ~ArduinoProxyReceiver();

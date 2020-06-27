@@ -5,7 +5,7 @@
 #include "datareceiverthread.h"
 
 int main(int argc, char *argv[]) {
-  DataReceiver *d = new ArduinoProxyReceiver(QString("/dev/USBtty0"));
+  DataReceiver *d = new ArduinoProxyReceiver(QString("/dev/ttyUSB0"));
 
   DataReceiverThread drth(d);
 

@@ -32,7 +32,9 @@ void ArduinoProxyReceiver::setup() {
 
   QString outputMsg = "";
   do {
-    QCoreApplication::processEvents();
+    QThread::msleep(100);
+
+    // QCoreApplication::processEvents();
     if (serial->bytesAvailable() > 30) {
       QByteArray data = serial->readAll();
       if (data.length() > 0) resp.append(data);

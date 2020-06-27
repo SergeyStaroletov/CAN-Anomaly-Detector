@@ -1,4 +1,5 @@
 #include "datareceiverthread.h"
+#include <QThread>
 #include "icardata.h"
 #include "lockers.h"
 
@@ -16,4 +17,7 @@ void DataReceiverThread::runLoop() {
 
 DataReceiverThread::DataReceiverThread(DataReceiver *receiver) {
   impl = new std::thread(&DataReceiverThread::runLoop, this);
+
+  QThread *t = QThread::create(std::bind(&DataReceiverThread::runLoop, this));
+  t->start();
 }
