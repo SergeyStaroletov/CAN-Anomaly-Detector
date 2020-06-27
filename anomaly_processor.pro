@@ -17,7 +17,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
     mazda6cardata.cpp \
-    icardata.cpp
+    icardata.cpp \
+    datareceiverthread.cpp \
+    datareceiver.cpp \
+    streamingreceiver.cpp \
+    lockers.cpp \
+    candumpreceiver.cpp \
+    arduinoproxyreceiver.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -26,4 +32,10 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     icardata.h \
-    mazda6cardata.h
+    mazda6cardata.h \
+    datareceiverthread.h \
+    datareceiver.h \
+    streamingreceiver.h \
+    lockers.h \
+    candumpreceiver.h \
+    arduinoproxyreceiver.h
