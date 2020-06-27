@@ -1,4 +1,5 @@
 QT -= gui
+QT += serialport
 
 CONFIG += c++11 console
 CONFIG -= app_bundle
@@ -39,3 +40,5 @@ HEADERS += \
     lockers.h \
     candumpreceiver.h \
     arduinoproxyreceiver.h
+
+INCLUDEPATH += /Users/sergey/Projects/can-utils/include

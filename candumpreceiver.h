@@ -6,6 +6,7 @@
 class CanDumpReceiver : public StreamingReceiver {
  public:
   CanDumpReceiver(int a){};
+  void setup();
   virtual CanData askForNewData();
   virtual ~CanDumpReceiver();
 };
