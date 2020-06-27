@@ -16,16 +16,21 @@ class Mazda6CarData : public ICarData {
   virtual double currentEngineTemp() { return engineTemp; }
 
   bool motorRpmProcessor(CanData data) {
+    if (data.size() <= 2) return false;
     motorRPM = int((data[0] * 256) + data[1] / 3.6);
     return true;
   }
 
   bool speedProcessor(CanData data) {
+    if (data.size() <= 6) return false;
+
     speed = (((data[4] * 256) + data[5]) - 10000) / 100;
     return true;
   }
 
   bool tempProcessor(CanData data) {
+    if (data.size() <= 1) return false;
+
     engineTemp = data[0] - 15;
     return true;
   }
