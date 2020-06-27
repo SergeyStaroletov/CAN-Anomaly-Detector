@@ -4,7 +4,7 @@
 #include "icardata.h"
 #include "lockers.h"
 
-void DataReceiverThread::runLoop() {
+void DataReceiverThread::run() {
   while (true) {
     CanData can = receiver->askForNewData();
     Lockers::monitor.lock();
@@ -19,11 +19,11 @@ void DataReceiverThread::runLoop() {
 DataReceiverThread::DataReceiverThread(DataReceiver *receiver) {
   this->receiver = receiver;
   qDebug() << "creating a thread to handle data...\n";
-  impl = new std::thread(&DataReceiverThread::runLoop, this);
+  // impl = new std::thread(&DataReceiverThread::runLoop, this);
 
   // QThread *t = QThread::create(std::bind(&DataReceiverThread::runLoop,
   // this)); t->start(); QtConcurrent::run(this, &DataReceiverThread::runLoop);
 
   // t->wait();
-  impl->join();
+  // impl->join();
 }

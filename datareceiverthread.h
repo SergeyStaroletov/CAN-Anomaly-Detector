@@ -1,16 +1,16 @@
 #ifndef DATARECEIVERTHREAD_H
 #define DATARECEIVERTHREAD_H
 
-#include <thread>
+#include <QThread>
 #include "datareceiver.h"
 
-class DataReceiverThread {
+class DataReceiverThread : public QThread {
  private:
-  std::thread *impl;
+  // std::thread *impl;
   DataReceiver *receiver;
   CanQueue *dataToProcess;
 
-  void runLoop();
+  void run();
 
  public:
   DataReceiverThread(DataReceiver *receiver);

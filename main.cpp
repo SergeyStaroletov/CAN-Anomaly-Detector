@@ -12,6 +12,7 @@ int main(int argc, char *argv[]) {
       new ArduinoProxyReceiver(QString("/dev/cu.wchusbserial1410"));
 
   DataReceiverThread drth(d);
+  drth.start();
 
   app.exec();
 
