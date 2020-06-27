@@ -27,8 +27,6 @@ class ICarData {
 
  private:
   std::multimap<int, ProcessFunctor> multiMap;
-
-  std::mutex* monitor;
 };
 
 #endif  // ICARDATA_H

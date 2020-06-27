@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <deque>
 #include <iterator>
+#include "lockers.h"
 
 ICarData::ICarData() {}
 ICarData::~ICarData(){};
@@ -13,10 +14,10 @@ void ICarData::registerProcessor(ProcessFunctor fun, int canId) {
 
 void ICarData::processData(CanQueue& data) {
   while (data.size() > 0) {
-    this->monitor->lock();
+    Lockers::monitor.lock();
     CanData oneCan = data.front();
     data.pop_front();
-    this->monitor->unlock();
+    Lockers::monitor.unlock();
 
     auto it = multiMap.find(oneCan[0]);
 
