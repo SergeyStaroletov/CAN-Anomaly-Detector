@@ -7,6 +7,7 @@
 #include "datareceiverthread.h"
 #include "datarowfetcherthread.h"
 #include "icardata.h"
+#include "lockers.h"
 #include "mazda6cardata.h"
 
 int main(int argc, char *argv[]) {
@@ -14,6 +15,7 @@ int main(int argc, char *argv[]) {
 
   // our data queue
   CanQueue dataToProcess;
+  Lockers::notifier = false;
 
   // objects
   DataReceiver *dataRcv =
