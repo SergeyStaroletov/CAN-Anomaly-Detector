@@ -25,7 +25,8 @@ SOURCES += \
     lockers.cpp \
     candumpreceiver.cpp \
     arduinoproxyreceiver.cpp \
-    cardataprocessorthread.cpp
+    cardataprocessorthread.cpp \
+    datarowfetcherthread.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -41,6 +42,7 @@ HEADERS += \
     lockers.h \
     candumpreceiver.h \
     arduinoproxyreceiver.h \
-    cardataprocessorthread.h
+    cardataprocessorthread.h \
+    datarowfetcherthread.h
 
 INCLUDEPATH += /Users/sergey/Projects/can-utils/include

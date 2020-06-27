@@ -6,11 +6,15 @@
 
 class carDataProcessorThread : public QThread {
  public:
-  carDataProcessorThread(ICarData *car) { this->car = car; }
+  carDataProcessorThread(ICarData *car, CanQueue *dataToProcess) {
+    this->car = car;
+    this->dataToProcess = dataToProcess;
+  }
   void run();
 
  private:
   ICarData *car;
+  CanQueue *dataToProcess;
 };
 
 #endif  // CARDATAPROCESSORTHREAD_H

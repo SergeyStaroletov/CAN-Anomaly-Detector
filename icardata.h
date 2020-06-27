@@ -16,7 +16,6 @@ class ICarData {
  public:
   ICarData();
 
- protected:
   virtual ~ICarData();
   virtual int currentRPM() = 0;
   virtual double currentSpeed() = 0;

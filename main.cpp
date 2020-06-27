@@ -3,7 +3,9 @@
 #include <iostream>
 #include "arduinoproxyreceiver.h"
 #include "candumpreceiver.h"
+#include "cardataprocessorthread.h"
 #include "datareceiverthread.h"
+#include "datarowfetcherthread.h"
 #include "icardata.h"
 #include "mazda6cardata.h"
 
@@ -21,6 +23,10 @@ int main(int argc, char *argv[]) {
   // threads
   DataReceiverThread drth(dataRcv, &dataToProcess);
   drth.start();
+  carDataProcessorThread cdpth(car, &dataToProcess);
+  cdpth.start();
+  DataRowFetcherThread drft(100, car);
+  drft.start();
 
   // loop
   app.exec();
