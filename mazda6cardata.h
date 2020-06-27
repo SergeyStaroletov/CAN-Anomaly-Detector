@@ -16,19 +16,18 @@ class Mazda6CarData : public ICarData {
   virtual double currentEngineTemp() { return engineTemp; }
 
   bool motorRpmProcessor(CanData data) {
-    motorRPM = (data[4] + (data[5] << 8)) - (512 * (data[5] & 0x80));
+    motorRPM = int((data[0] * 256) + data[1] / 3.6);
     return true;
   }
 
   bool speedProcessor(CanData data) {
-    speed = 0.1 * (data[2] + ((data[3] & 0x0F) << 8));
+    speed = (((data[4] * 256) + data[5]) - 10000) / 100;
     return true;
   }
 
   bool tempProcessor(CanData data) {
-    // Negative terminal temperature degrees C
-    if ((data[6] > 0)) engineTemp = ((data[6] + ((data[7] & 0x07) << 8))) * 0.1;
-    return (data[6] > 0);
+    engineTemp = data[0] - 15;
+    return true;
   }
 
  protected:
