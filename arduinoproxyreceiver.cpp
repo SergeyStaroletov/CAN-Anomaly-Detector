@@ -122,18 +122,33 @@ CanData ArduinoProxyReceiver::askForNewData() {
   dataToProcess = dataRep.mid(indexOf + 1);
 
   data.clear();
-  data.append(dataToProcess);
+  // data.append(dataToProcess);
 
   do {
-    QDateTime timeStartGetting = QDateTime::currentDateTime();
-    QString sendMe = "";
+    QThread::msleep(1);
+
+    indexOf = -1;
+    bool somedata = false;
+    do {
+      QDateTime timeStartGetting = QDateTime::currentDateTime();
+      QString sendMe = "";
+
+      QByteArray data0 = serial->readAll();
+      if (data0.length() > 0) {
+        data.append(data0);
+        dataRep = QString::fromStdString(data.toStdString());
+        indexOf = dataRep.indexOf("\n");
+      }
+    } while (indexOf < 0);
+
+    /*
     QThread::msleep(1);
 
     int runn = 0;
     do {
       QCoreApplication::processEvents();
 
-      QThread::msleep(10);
+     // QThread::msleep(10);
 
       do {
         QThread::msleep(0);
@@ -157,12 +172,14 @@ CanData ArduinoProxyReceiver::askForNewData() {
     } while (timeStartGetting.msecsTo(QDateTime::currentDateTime()) <
              100);  // collect all data for not more than 100ms
 
-    qDebug() << sendMe << "\n";
+    */
+
+    qDebug() << dataRep << "\n";
     // process data we collected in 100ms period
     // Process data from string like FF 11 22 33 44 55 66 77 88
 
-    QStringList strings = sendMe.split("\n");
-    for (int s = 0; s < strings.length(); s++) {
+    QStringList strings = dataRep.split("\n");
+    for (int s = 0; s < strings.length() - 1; s++) {
       // second: get bytes in array from each line
       QStringList bytes = strings.at(s).split(" ");
       int count = (bytes.length() <= 9) ? bytes.length() : 9;
@@ -193,7 +210,6 @@ CanData ArduinoProxyReceiver::askForNewData() {
     // notify
     Lockers::notifier = true;
     Lockers::cond_var.notify_one();
-
   } while (!isStopped);
 
   // stub
