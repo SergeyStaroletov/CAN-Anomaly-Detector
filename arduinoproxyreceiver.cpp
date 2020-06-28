@@ -111,9 +111,11 @@ CanData ArduinoProxyReceiver::askForNewData() {
   int indexOf = -1;
   do {
     QByteArray data0 = serial->readAll();
-    if (data0.length() > 0) data.append(data0);
-    dataRep = QString::fromStdString(data.toStdString());
-    indexOf = dataRep.indexOf("\n");
+    if (data0.length() > 0) {
+      data.append(data0);
+      dataRep = QString::fromStdString(data.toStdString());
+      indexOf = dataRep.indexOf("\n");
+    }
   } while (indexOf < 0);
 
   // we get from \n to end (start of new substring)
@@ -137,9 +139,11 @@ CanData ArduinoProxyReceiver::askForNewData() {
         QThread::msleep(0);
 
         QByteArray data0 = serial->readAll();
-        if (data0.length() > 0) data.append(data0);
-        dataRep = QString::fromStdString(data.toStdString());
-        indexOf = dataRep.indexOf("\n");
+        if (data0.length() > 0) {
+          data.append(data0);
+          dataRep = QString::fromStdString(data.toStdString());
+          indexOf = dataRep.indexOf("\n");
+        }
       } while (indexOf < 0);
       QString dataToProcessNext = dataRep.mid(indexOf + 1);
 
@@ -153,7 +157,7 @@ CanData ArduinoProxyReceiver::askForNewData() {
     } while (timeStartGetting.msecsTo(QDateTime::currentDateTime()) <
              100);  // collect all data for not more than 100ms
 
-    // qDebug() << dataRep << "\n";
+    qDebug() << sendMe << "\n";
     // process data we collected in 100ms period
     // Process data from string like FF 11 22 33 44 55 66 77 88
 
