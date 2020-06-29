@@ -6,8 +6,8 @@
 #include <QStringList>
 #include <QTextStream>
 #include <QThread>
+#include <cstring>
 #include "lockers.h"
-
 void FileReceiver::setup() { file.setFileName(this->path); }
 
 CanData FileReceiver::askForNewData() {
@@ -25,20 +25,32 @@ CanData FileReceiver::askForNewData() {
       if (vals.size() < 10) continue;
 
       CarState state;
+      std::memset(&state, 0, sizeof(state));
 
       QString ts = vals[0].replace("\"", "");
       QDateTime timestamp =
           QDateTime::fromString(ts, "yyyy-MM-dd HH:mm:ss.zzz");
 
-      if (!firstRun) {
-        unsigned diff = old.msecsTo(timestamp);
-        QThread::msleep(diff / 2);  // we wait...
-      }
       state.timestamp = timestamp.toTime_t();
 
       state.speed = vals[1].toInt();
       state.rpm = vals[6].toInt();
       state.temp = vals[9].toInt();
+
+      if (state.speed == 0 && state.rpm == 0 && state.temp == 0) continue;
+
+      if (!firstRun) {
+        unsigned diff = old.msecsTo(timestamp);
+
+        // calculate the derivatives
+        if (diff != 0) {
+          state.speedDot = 1. * (state.speed - oldState.speed) / diff;
+          state.rpmDot = 1. * (state.rpm - oldState.rpm) / diff;
+          state.tempDot = 1. * (state.tempDot - oldState.tempDot) / diff;
+        }
+
+        QThread::msleep(diff / 2);  // we wait...
+      }
 
       qDebug() << "Car state vector: <speed: " << state.speed
                << " rpm: " << state.rpm << " temp: " << state.temp << ">\n";
@@ -49,6 +61,9 @@ CanData FileReceiver::askForNewData() {
       Lockers::row_lock.unlock();
 
       old = timestamp;
+      oldState.speed = state.speed;
+      oldState.rpm = state.rpm;
+      oldState.temp = state.temp;
       firstRun = false;
     }
     file.close();

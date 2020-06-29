@@ -21,6 +21,7 @@ class FileReceiver : public DataReceiver {
   QString path;
   QFile file;
   std::deque<CarState> *dataRows;
+  CarState oldState;
 };
 
 #endif  // FILERECEIVER_H

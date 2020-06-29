@@ -28,7 +28,10 @@ SOURCES += \
     cardataprocessorthread.cpp \
     datarowfetcherthread.cpp \
     filedirreceiver.cpp \
-    filereceiver.cpp
+    filereceiver.cpp \
+    anomalypredictor.cpp \
+    anomalypredictorsltl.cpp \
+    anomalypredictorstatistic.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -47,6 +50,9 @@ HEADERS += \
     cardataprocessorthread.h \
     datarowfetcherthread.h \
     filedirreceiver.h \
-    filereceiver.h
+    filereceiver.h \
+    anomalypredictor.h \
+    anomalypredictorsltl.h \
+    anomalypredictorstatistic.h
 
 INCLUDEPATH += /Users/sergey/Projects/can-utils/include

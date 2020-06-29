@@ -1,6 +1,3 @@
 #include "anomalypredictor.h"
 
-AnomalyPredictor::AnomalyPredictor()
-{
-
-}
+AnomalyPredictor::~AnomalyPredictor() = default;

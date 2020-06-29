@@ -16,6 +16,10 @@ typedef struct {
   int rpm;
   double speed;
   double temp;
+  // derivatives
+  double rpmDot;
+  double speedDot;
+  double tempDot;
 } CarState;
 
 class ICarData {
