@@ -26,7 +26,9 @@ SOURCES += \
     candumpreceiver.cpp \
     arduinoproxyreceiver.cpp \
     cardataprocessorthread.cpp \
-    datarowfetcherthread.cpp
+    datarowfetcherthread.cpp \
+    filedirreceiver.cpp \
+    filereceiver.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -43,6 +45,8 @@ HEADERS += \
     candumpreceiver.h \
     arduinoproxyreceiver.h \
     cardataprocessorthread.h \
-    datarowfetcherthread.h
+    datarowfetcherthread.h \
+    filedirreceiver.h \
+    filereceiver.h
 
 INCLUDEPATH += /Users/sergey/Projects/can-utils/include
