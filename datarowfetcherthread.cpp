@@ -1,17 +1,24 @@
 #include "datarowfetcherthread.h"
 
 #include <QDebug>
+#include "lockers.h"
 
 void DataRowFetcherThread::run() {
   while (true) {
     // wait for a new portion of data
     QThread::msleep(this->latency);
 
-    int rpm = this->car->currentRPM();
-    double speed = this->car->currentSpeed();
-    int temp = this->car->currentEngineTemp();
+    CarState state;
+    state.rpm = this->car->currentRPM();
+    state.speed = this->car->currentSpeed();
+    state.temp = this->car->currentEngineTemp();
 
-    qDebug() << "speed: " << speed << " rpm: " << rpm << " temp: " << temp
-             << "\n";
+    qDebug() << "Car state vector: <speed: " << state.speed
+             << " rpm: " << state.rpm << " temp: " << state.temp << ">\n";
+
+    Lockers::row_lock.lock();
+    if (this->dataRows.size() == capacity) dataRows.pop_front();
+    dataRows.push_back(state);
+    Lockers::row_lock.unlock();
   }
 }

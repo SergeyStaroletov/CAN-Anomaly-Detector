@@ -7,6 +7,7 @@ class Lockers {
   Lockers();
   static std::condition_variable cond_var;
   static std::mutex monitor;
+  static std::mutex row_lock;
   static bool notifier;
 };
 

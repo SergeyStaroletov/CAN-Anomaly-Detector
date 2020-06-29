@@ -13,13 +13,17 @@
 int main(int argc, char *argv[]) {
   QCoreApplication app(argc, argv);
 
+  // consts
+  const QString comPort = "/dev/ttyUSB0";
+  const unsigned dataCapacity = 11000;
+  const unsigned dataFetchInterval = 100;
+
   // our data queue
   CanQueue dataToProcess;
   Lockers::notifier = false;
 
   // objects
-  DataReceiver *dataRcv =
-      new ArduinoProxyReceiver(QString("/dev/ttyUSB0"), &dataToProcess);
+  DataReceiver *dataRcv = new ArduinoProxyReceiver(comPort, &dataToProcess);
   ICarData *car = new Mazda6CarData();
 
   // threads
@@ -27,7 +31,7 @@ int main(int argc, char *argv[]) {
   drth.start();
   carDataProcessorThread cdpth(car, &dataToProcess);
   cdpth.start();
-  DataRowFetcherThread drft(100, car);
+  DataRowFetcherThread drft(dataFetchInterval, dataCapacity, car);
   drft.start();
 
   // loop
