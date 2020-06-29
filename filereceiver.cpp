@@ -1,13 +1,18 @@
 #include "filereceiver.h"
 #include <QDir>
+#include <QTextStream>
 
-void FileReceiver::setup() {}
+void FileReceiver::setup() { file.setFileName(this->path); }
 
 CanData FileReceiver::askForNewData() {
   CanData can;
 
-  while (true) {
-    // tbd
+  if (file.open(QIODevice::ReadOnly)) {
+    QTextStream in(&file);
+    while (!in.atEnd()) {
+      QString line = in.readLine();
+    }
+    file.close();
   }
 
   return can;
