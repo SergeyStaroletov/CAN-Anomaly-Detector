@@ -6,6 +6,7 @@
 #include "cardataprocessorthread.h"
 #include "datareceiverthread.h"
 #include "datarowfetcherthread.h"
+#include "filereceiver.h"
 #include "icardata.h"
 #include "lockers.h"
 #include "mazda6cardata.h"
@@ -20,10 +21,14 @@ int main(int argc, char *argv[]) {
 
   // our data queue
   CanQueue dataToProcess;
+  std::deque<CarState> dataRows;
   Lockers::notifier = false;
 
   // objects
-  DataReceiver *dataRcv = new ArduinoProxyReceiver(comPort, &dataToProcess);
+  // DataReceiver *dataRcv = new ArduinoProxyReceiver(comPort, &dataToProcess);
+  DataReceiver *dataRcv = new FileReceiver(
+      QString("/Volumes/SD128/CAN_DATA_ARTICLE/usual_drive.csv"), &dataRows);
+
   ICarData *car = new Mazda6CarData();
 
   // threads
@@ -31,7 +36,7 @@ int main(int argc, char *argv[]) {
   drth.start();
   carDataProcessorThread cdpth(car, &dataToProcess);
   cdpth.start();
-  DataRowFetcherThread drft(dataFetchInterval, dataCapacity, car);
+  DataRowFetcherThread drft(dataFetchInterval, dataCapacity, car, &dataRows);
   drft.start();
 
   // loop

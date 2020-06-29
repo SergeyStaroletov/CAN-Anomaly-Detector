@@ -12,7 +12,7 @@ typedef std::function<bool(std::vector<int>)> ProcessFunctor;
 typedef std::vector<int> CanData;
 typedef std::deque<CanData> CanQueue;
 typedef struct {
-  long timestamp;
+  unsigned long timestamp;
   int rpm;
   double speed;
   double temp;

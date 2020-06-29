@@ -17,8 +17,8 @@ void DataRowFetcherThread::run() {
              << " rpm: " << state.rpm << " temp: " << state.temp << ">\n";
 
     Lockers::row_lock.lock();
-    if (this->dataRows.size() == capacity) dataRows.pop_front();
-    dataRows.push_back(state);
+    if (this->dataRows->size() == capacity) dataRows->pop_front();
+    dataRows->push_back(state);
     Lockers::row_lock.unlock();
   }
 }
