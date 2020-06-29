@@ -109,7 +109,12 @@ CanData CanDumpReceiver::askForNewData() {
       for (int i = 0; i < frame.len; i++) {
         can.push_back(frame.data[i]);
       }
-      break;
+
+      Lockers::monitor.lock();
+      this->dataToProcess->push_back(can);
+      Lockers::monitor.unlock();
+
+      // break;
     }
 #endif
     return can;
