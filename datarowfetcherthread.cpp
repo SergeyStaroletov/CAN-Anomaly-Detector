@@ -13,6 +13,8 @@ void DataRowFetcherThread::run() {
     state.speed = this->car->currentSpeed();
     state.temp = this->car->currentEngineTemp();
 
+    if (state.speed == 0 && state.rpm == 0 && state.temp == 0) continue;
+
     qDebug() << "Car state vector: <speed: " << state.speed
              << " rpm: " << state.rpm << " temp: " << state.temp << ">\n";
 

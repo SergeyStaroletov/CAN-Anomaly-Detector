@@ -1,6 +1,8 @@
 #include <QCoreApplication>
 #include <QString>
 #include <iostream>
+#include "anomalypredictor.h"
+#include "anomalypredictorsltl.h"
 #include "arduinoproxyreceiver.h"
 #include "candumpreceiver.h"
 #include "cardataprocessorthread.h"
@@ -26,8 +28,14 @@ int main(int argc, char *argv[]) {
 
   // objects
   // DataReceiver *dataRcv = new ArduinoProxyReceiver(comPort, &dataToProcess);
-  DataReceiver *dataRcv = new FileReceiver(
-      QString("/Volumes/SD128/CAN_DATA_ARTICLE/usual_drive.csv"), &dataRows);
+  // FileReceiver *dataRcv = new FileReceiver(
+  //   QString("/Volumes/SD128/CAN_DATA_ARTICLE/usual_drive.csv"), &dataRows);
+
+  FileReceiver *dataRcv = new FileReceiver(
+      QString("/Volumes/SD128/CAN_DATA_ARTICLE/bad_rpm.csv"), &dataRows);
+
+  AnomalyPredictor *pred = new AnomalyPredictorSLTL();
+  dataRcv->attachPredictor(pred);
 
   ICarData *car = new Mazda6CarData();
 

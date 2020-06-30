@@ -31,7 +31,7 @@ CanData FileReceiver::askForNewData() {
       QDateTime timestamp =
           QDateTime::fromString(ts, "yyyy-MM-dd HH:mm:ss.zzz");
 
-      state.timestamp = timestamp.toTime_t();
+      state.timestamp = timestamp.toMSecsSinceEpoch();
 
       state.speed = vals[1].toInt();
       state.rpm = vals[6].toInt();
@@ -59,6 +59,10 @@ CanData FileReceiver::askForNewData() {
       // if (this->dataRows->size() == capacity) dataRows->pop_front();
       dataRows->push_back(state);
       Lockers::row_lock.unlock();
+
+      // notify predictors
+      for (AnomalyPredictor *p : this->attachedPredictors)
+        p->getNewDataToPredict(state);
 
       old = timestamp;
       oldState.speed = state.speed;

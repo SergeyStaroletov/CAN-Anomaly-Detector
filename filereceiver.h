@@ -4,6 +4,8 @@
 #include <QFile>
 #include <QString>
 #include <deque>
+#include <vector>
+#include "anomalypredictor.h"
 #include "datareceiver.h"
 
 class FileReceiver : public DataReceiver {
@@ -12,6 +14,9 @@ class FileReceiver : public DataReceiver {
     this->path = path;
     this->dataRows = dataRows;
     setup();
+  };
+  void attachPredictor(AnomalyPredictor *predictor) {
+    attachedPredictors.push_back(predictor);
   };
   virtual CanData askForNewData();
   ~FileReceiver();
@@ -22,6 +27,7 @@ class FileReceiver : public DataReceiver {
   QFile file;
   std::deque<CarState> *dataRows;
   CarState oldState;
+  std::vector<AnomalyPredictor *> attachedPredictors;
 };
 
 #endif  // FILERECEIVER_H
