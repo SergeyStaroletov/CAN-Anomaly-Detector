@@ -10,8 +10,10 @@
 #include "datarowfetcherthread.h"
 #include "filereceiver.h"
 #include "icardata.h"
+#include "isltlproperty.h"
 #include "lockers.h"
 #include "mazda6cardata.h"
+#include "speedincreasesafterrpmincreasesproperty.h"
 
 int main(int argc, char *argv[]) {
   QCoreApplication app(argc, argv);
@@ -34,7 +36,14 @@ int main(int argc, char *argv[]) {
   FileReceiver *dataRcv = new FileReceiver(
       QString("/Volumes/SD128/CAN_DATA_ARTICLE/bad_rpm.csv"), &dataRows);
 
-  AnomalyPredictor *pred = new AnomalyPredictorSLTL();
+  AnomalyPredictorSLTL *pred = new AnomalyPredictorSLTL();
+  SpeedIncreasesAfterRPMIncreasesProperty *property =
+      new SpeedIncreasesAfterRPMIncreasesProperty();
+  // for now just to inform
+  property->setFormula(
+      "G (rpm>1000&temp>60)&G[0,1000] rpm’ > 0 ->(G[1000,2000] v’ > 0)");
+  pred->attachProperty(property);
+
   dataRcv->attachPredictor(pred);
 
   ICarData *car = new Mazda6CarData();

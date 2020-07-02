@@ -31,7 +31,9 @@ SOURCES += \
     filereceiver.cpp \
     anomalypredictor.cpp \
     anomalypredictorsltl.cpp \
-    anomalypredictorstatistic.cpp
+    anomalypredictorstatistic.cpp \
+    isltlproperty.cpp \
+    speedincreasesafterrpmincreasesproperty.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -53,6 +55,8 @@ HEADERS += \
     filereceiver.h \
     anomalypredictor.h \
     anomalypredictorsltl.h \
-    anomalypredictorstatistic.h
+    anomalypredictorstatistic.h \
+    isltlproperty.h \
+    speedincreasesafterrpmincreasesproperty.h
 
 INCLUDEPATH += /Users/sergey/Projects/can-utils/include

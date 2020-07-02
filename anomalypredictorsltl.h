@@ -1,21 +1,22 @@
 #ifndef ANOMALYPREDICTORSLTL_H
 #define ANOMALYPREDICTORSLTL_H
 
+#include <vector>
 #include "anomalypredictor.h"
 #include "icardata.h"
-
-enum state { start, rpm_greater_1000, rpm_dot_greater_0, speed_dotg_greater_0 };
+#include "isltlproperty.h"
 
 class AnomalyPredictorSLTL : public AnomalyPredictor {
  public:
   AnomalyPredictorSLTL();
+  void attachProperty(ISLTLProperty *property) {
+    properties.push_back(property);
+  }
   virtual void getNewDataToPredict(CarState carstate);
   virtual ~AnomalyPredictorSLTL();
 
  private:
-  state currentState;
-  unsigned long t;
-  bool once = false;
+  std::vector<ISLTLProperty *> properties;
 };
 
 #endif  // ANOMALYPREDICTORSLTL_H
