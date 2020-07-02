@@ -15,6 +15,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+#python binding
+INCLUDEPATH += /usr/local/Cellar/python@3.8/3.8.2/Frameworks/Python.framework/Versions/3.8/include/python3.8
+LIBS+= -L/usr/local/Cellar/python@3.8/3.8.2/Frameworks/Python.framework/Versions/3.8/lib -lpython3.8
+
+
+
+#
+
+
 SOURCES += \
         main.cpp \
     mazda6cardata.cpp \
@@ -33,7 +42,8 @@ SOURCES += \
     anomalypredictorsltl.cpp \
     anomalypredictorstatistic.cpp \
     isltlproperty.cpp \
-    speedincreasesafterrpmincreasesproperty.cpp
+    speedincreasesafterrpmincreasesproperty.cpp \
+    anomalypredictorlstm.cpp
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
@@ -57,6 +67,10 @@ HEADERS += \
     anomalypredictorsltl.h \
     anomalypredictorstatistic.h \
     isltlproperty.h \
-    speedincreasesafterrpmincreasesproperty.h
+    speedincreasesafterrpmincreasesproperty.h \
+    anomalypredictorlstm.h
 
 INCLUDEPATH += /Users/sergey/Projects/can-utils/include
+
+DISTFILES += \
+    LSTMAnomaly.py

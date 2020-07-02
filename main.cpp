@@ -2,6 +2,7 @@
 #include <QString>
 #include <iostream>
 #include "anomalypredictor.h"
+//#include "anomalypredictorlstm.h"
 #include "anomalypredictorsltl.h"
 #include "arduinoproxyreceiver.h"
 #include "candumpreceiver.h"
@@ -19,7 +20,7 @@ int main(int argc, char *argv[]) {
   QCoreApplication app(argc, argv);
 
   // consts
-  const QString comPort = "/dev/ttyUSB0";
+  // const QString comPort = "/dev/ttyUSB0";
   const unsigned dataCapacity = 11000;
   const unsigned dataFetchInterval = 100;
 
@@ -41,10 +42,14 @@ int main(int argc, char *argv[]) {
       new SpeedIncreasesAfterRPMIncreasesProperty();
   // for now just to inform
   property->setFormula(
-      "G (rpm>1000&temp>60)&G[0,1000] rpm’ > 0 ->(G[1000,2000] v’ > 0)");
+      "G(rpm > 1000 & temp > 60) & G[0,1000](rpm’ > 0) ->(G[1000,2000](v’ > "
+      "0)))");
   pred->attachProperty(property);
 
   dataRcv->attachPredictor(pred);
+
+  // AnomalyPredictorLSTM *lstm = new AnomalyPredictorLSTM();
+  // dataRcv->attachPredictor(lstm);
 
   ICarData *car = new Mazda6CarData();
 
