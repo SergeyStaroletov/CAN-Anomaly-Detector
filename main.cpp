@@ -30,10 +30,15 @@ int main(int argc, char *argv[]) {
   Lockers::notifier = false;
 
   // objects
+
+  // to load data from arduino-can shield
   // DataReceiver *dataRcv = new ArduinoProxyReceiver(comPort, &dataToProcess);
+
+  // real CAN data
   // FileReceiver *dataRcv = new FileReceiver(
   //   QString("/Volumes/SD128/CAN_DATA_ARTICLE/usual_drive.csv"), &dataRows);
 
+  // generated file
   FileReceiver *dataRcv = new FileReceiver(
       QString("/Volumes/SD128/CAN_DATA_ARTICLE/bad_rpm.csv"), &dataRows);
 
@@ -42,14 +47,11 @@ int main(int argc, char *argv[]) {
       new SpeedIncreasesAfterRPMIncreasesProperty();
   // for now just to inform
   property->setFormula(
-      "G(rpm > 1000 & temp > 60) & G[0,1000](rpm’ > 0) ->(G[1000,2000](v’ > "
-      "0)))");
+      "G(rpm > 1000 & temp > 60) & G[0,1000](rpm’ > 0) -> (G[1000,2000](v’ > "
+      "0))");
   pred->attachProperty(property);
 
   dataRcv->attachPredictor(pred);
-
-  // AnomalyPredictorLSTM *lstm = new AnomalyPredictorLSTM();
-  // dataRcv->attachPredictor(lstm);
 
   ICarData *car = new Mazda6CarData();
 

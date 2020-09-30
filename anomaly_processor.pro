@@ -19,8 +19,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 INCLUDEPATH += /usr/local/Cellar/python@3.8/3.8.2/Frameworks/Python.framework/Versions/3.8/include/python3.8
 LIBS+= -L/usr/local/Cellar/python@3.8/3.8.2/Frameworks/Python.framework/Versions/3.8/lib -lpython3.8
 
-
-
+CONFIG+=sdk_no_version_check
 #
 
 

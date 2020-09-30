@@ -98,9 +98,6 @@ void ArduinoProxyReceiver::setup() {
  *
  */
 CanData ArduinoProxyReceiver::askForNewData() {
-  //
-  static int nTries;
-
   bool isStopped = false;
 
   QByteArray data;
@@ -122,13 +119,12 @@ CanData ArduinoProxyReceiver::askForNewData() {
   dataToProcess = dataRep.mid(indexOf + 1);
 
   data.clear();
-  // data.append(dataToProcess);
 
   do {
     QThread::msleep(1);
 
     indexOf = -1;
-    bool somedata = false;
+
     do {
       QDateTime timeStartGetting = QDateTime::currentDateTime();
       QString sendMe = "";
