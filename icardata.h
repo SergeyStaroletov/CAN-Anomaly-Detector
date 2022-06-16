@@ -14,6 +14,7 @@ typedef std::deque<CanData> CanQueue;
 typedef struct {
   unsigned long timestamp;
   int rpm;
+  int gear;
   double speed;
   double temp;
   // derivatives

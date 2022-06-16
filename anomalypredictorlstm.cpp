@@ -4,17 +4,21 @@
 #include <QDateTime>
 #include <QDebug>
 #include <QFile>
+#include <QBuffer>
 
 void AnomalyPredictorLSTM::createCSVFile() {
-  fileOut.setFileName("input.csv");
-  fileOut.open(QFile::WriteOnly);
-  streamOut.setDevice(&fileOut);
-  streamOut << "timestamp,vehicle_speed,vehicle_rpm,engine_temp\n";
+  //fileOut.setFileName("input.csv");
+  //fileOut.open(QFile::WriteOnly | QIODevice::Text);
+  buffer.open(QBuffer::ReadWrite);
+  streamOut.setDevice(&buffer);
+  //streamOut.setDevice(&fileOut);
+  streamOut << "timestamp,vehicle_speed,vehicle_rpm,engine_temp,gear\n";
 }
 
 AnomalyPredictorLSTM::AnomalyPredictorLSTM() {
-  currentPoints = 11000;
+ numPointsToPredict = 100;//11000;
 
+ currentPoints = 0;
   // initialize python embedding
 
   Py_Initialize();
@@ -51,8 +55,12 @@ AnomalyPredictorLSTM::AnomalyPredictorLSTM() {
 
   pClass = PyDict_GetItemString(pDict, "LSTMAnomaly");
 
+
   if (PyCallable_Check(pClass)) {
     pInstance = PyObject_CallObject(pClass, NULL);
+  } else {
+      qDebug() << "!! no py instance";
+  exit(1);
   }
 
   // Call a method of the class to setup
@@ -69,11 +77,24 @@ void AnomalyPredictorLSTM::getNewDataToPredict(CarState carstate) {
                           .toString("yyyy-MM-dd HH:mm:ss.zzz");
 
   streamOut << timestamp << "," << carstate.speed << "," << carstate.rpm << ","
-            << carstate.temp << "\n";
+            << carstate.temp << "," << carstate.gear << "\n";
 
   // we got a sufficient number of points to run the detector
   if (currentPoints >= numPointsToPredict) {
-    fileOut.close();
+      currentPoints = 0;
+    //streamOut.reset();
+    //fileOut.close();
+    mut.lock();
+    QByteArray data = buffer.buffer();
+    QFile file("input.csv");
+    file.open(QIODevice::WriteOnly);
+    file.write(data);
+    file.close();
+    buffer.close();
+    buffer.open(QBuffer::ReadWrite);
+    streamOut << "timestamp,vehicle_speed,vehicle_rpm,engine_temp,gear\n";
+
+    mut.unlock();
 
     // todo: run in a mulithreaded task
 
@@ -88,10 +109,12 @@ void AnomalyPredictorLSTM::getNewDataToPredict(CarState carstate) {
             << " points detected at "
             << QDateTime::fromMSecsSinceEpoch(carstate.timestamp).toString();
       }
+    } else {
+        qDebug() << "!!! NULL predict";
     }
 
     // next iteration
-    createCSVFile();
+    //createCSVFile();
     currentPoints = 0;
   }
 }

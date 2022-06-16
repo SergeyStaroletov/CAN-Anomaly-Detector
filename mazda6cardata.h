@@ -39,6 +39,7 @@ class Mazda6CarData : public ICarData {
   int motorRPM;
   double speed;
   double engineTemp;
+  int gear;
 };
 
 #endif  // MAZDA6CARDATA_H

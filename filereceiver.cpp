@@ -35,6 +35,7 @@ CanData FileReceiver::askForNewData() {
 
       state.speed = vals[1].toInt();
       state.rpm = vals[6].toInt();
+      state.gear = vals[7].toInt();
       state.temp = vals[9].toInt();
 
       if (state.speed == 0 && state.rpm == 0 && state.temp == 0) continue;
@@ -53,7 +54,7 @@ CanData FileReceiver::askForNewData() {
       }
 
       qDebug() << "Car state vector: <speed: " << state.speed
-               << " rpm: " << state.rpm << " temp: " << state.temp << ">\n";
+               << " rpm: " << state.rpm << " gear: " << state.gear << " temp: " << state.temp << ">\n";
 
       Lockers::row_lock.lock();
       // if (this->dataRows->size() == capacity) dataRows->pop_front();

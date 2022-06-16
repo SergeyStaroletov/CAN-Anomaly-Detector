@@ -1,8 +1,9 @@
+#include "anomalypredictorlstm.h"
+
 #include <QCoreApplication>
 #include <QString>
 #include <iostream>
 #include "anomalypredictor.h"
-//#include "anomalypredictorlstm.h"
 #include "anomalypredictorsltl.h"
 #include "arduinoproxyreceiver.h"
 #include "candumpreceiver.h"
@@ -39,9 +40,13 @@ int main(int argc, char *argv[]) {
   //   QString("/Volumes/SD128/CAN_DATA_ARTICLE/usual_drive.csv"), &dataRows);
 
   // generated file
-  FileReceiver *dataRcv = new FileReceiver(
-      QString("/Volumes/SD128/CAN_DATA_ARTICLE/bad_rpm.csv"), &dataRows);
+  // FileReceiver *dataRcv = new FileReceiver(
+  //    QString("/Volumes/SD128/CAN_DATA_ARTICLE/bad_rpm.csv"), &dataRows);
 
+  FileReceiver *dataRcv = new FileReceiver(
+      QString("c:/work/LSTM-Neural-Network-for-Time-Series-Prediction/data/usual_drive.csv"), &dataRows);
+
+  /*
   AnomalyPredictorSLTL *pred = new AnomalyPredictorSLTL();
   SpeedIncreasesAfterRPMIncreasesProperty *property =
       new SpeedIncreasesAfterRPMIncreasesProperty();
@@ -49,7 +54,10 @@ int main(int argc, char *argv[]) {
   property->setFormula(
       "G(rpm > 1000 & temp > 60) & G[0,1000](rpm’ > 0) -> (G[1000,2000](v’ > "
       "0))");
-  pred->attachProperty(property);
+  pred->attachProperty(property);*/
+
+  AnomalyPredictorLSTM *pred = new AnomalyPredictorLSTM();
+
 
   dataRcv->attachPredictor(pred);
 

@@ -16,8 +16,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 #python binding
-INCLUDEPATH += /usr/local/Cellar/python@3.8/3.8.2/Frameworks/Python.framework/Versions/3.8/include/python3.8
-LIBS+= -L/usr/local/Cellar/python@3.8/3.8.2/Frameworks/Python.framework/Versions/3.8/lib -lpython3.8
+#INCLUDEPATH += /usr/local/Cellar/python@3.8/3.8.2/Frameworks/Python.framework/Versions/3.8/include/python3.8
+#LIBS+= -L/usr/local/Cellar/python@3.8/3.8.2/Frameworks/Python.framework/Versions/3.8/lib -lpython3.8
+
+INCLUDEPATH += c:/Users/sergey/anaconda3/envs/myenv/include
+LIBS += -Lc:/Users/sergey/anaconda3/envs/myenv/libs -lpython36
 
 CONFIG+=sdk_no_version_check
 #
