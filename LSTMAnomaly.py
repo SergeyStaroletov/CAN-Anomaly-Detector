@@ -10,10 +10,10 @@ class LSTMAnomaly:
     def __init__(self):
         print("INIT")
 
-    def setup():
+    def setup(self):
         printf("setup")
 
-    def predict():
+    def predict(self):
         printf("predict")
 
 

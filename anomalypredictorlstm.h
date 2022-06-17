@@ -22,13 +22,14 @@ class AnomalyPredictorLSTM : public AnomalyPredictor {
   ~AnomalyPredictorLSTM();
 
  private:
-  PyObject *pName, *pModule, *pDict, *pClass, *pInstance, *pValue;
+     PyObject *pName, *pModule, *pDict, *pClass, *pInstance;
   unsigned currentPoints;
   unsigned numPointsToPredict;
   QTextStream streamOut;
   QBuffer buffer;
   QFile fileOut;
   QMutex mut;
+  bool busy;
 };
 
 #endif  // ANOMALYPREDICATORLSTM_H

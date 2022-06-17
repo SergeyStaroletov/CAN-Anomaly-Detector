@@ -2,10 +2,15 @@ import os
 import json
 import time
 import math
+import sys
 import numpy as np
 import matplotlib.pyplot as plt
 from core.data_processor import DataLoader
 from core.model import Model
+
+
+def eprint(*args, **kwargs):
+    print(*args, file=sys.stderr, **kwargs)
 
 def plot_results(predicted_data, true_data):
     fig = plt.figure(facecolor='white')
@@ -13,7 +18,8 @@ def plot_results(predicted_data, true_data):
     ax.plot(true_data, label='True Data')
     plt.plot(predicted_data, label='Prediction')
     plt.legend()
-    plt.show()
+    plt.savefig('series.png')
+    # plt.show()
 
 
 def plot_results_multiple(predicted_data, true_data, prediction_len):
@@ -30,18 +36,19 @@ def plot_results_multiple(predicted_data, true_data, prediction_len):
 
 class LSTMAnomaly:
     def __init__(self):
-        print("call INIT")
+        # import sys 
+        # stdoutOrigin=sys.stdout 
+        # sys.stdout = open("log.txt", "w")
+        # sys.stderr = open("log_err.txt", "w")
+        eprint("call INIT")
 
-    def setup():
-        print("call setup")
 
-    def predict():
+    def setup(self):
+        eprint("call setup")
 
-        import sys 
-        stdoutOrigin=sys.stdout 
-        sys.stdout = open("log.txt", "w")
+    def predict(self):
 
-        print("call predict")
+        eprint("call predict")
         configs = json.load(open('config_new.json', 'r'))
         if not os.path.exists(configs['model']['save_dir']): os.makedirs(configs['model']['save_dir'])
 
@@ -76,19 +83,27 @@ class LSTMAnomaly:
             predictions[i] = predictions[i]-diff0
 
         #anomaly detection
+        anomal = 0
         for i, _ in enumerate(predictions):
             d = math.sqrt((predictions[i] - y_test[i])[0] * (predictions[i] - y_test[i])[0])
             if d > 2*std:
                 print('Anomaly at ', i)
+                anomal = anomal + 1
                 diff = (predictions[i]-y_test[i])[0]
                 for j, _ in enumerate(predictions): 
                     if j>=i:
                         predictions[j] = predictions[j]-diff
 
-        # plot_results_multiple(predictions, y_test, configs['data']['sequence_length'])
         plot_results(predictions, y_test)
+        # return anomal
+
+def main():
+    ano = LSTMAnomaly()
+    ano.setup()
+
+    ano.predict()
 
 
-
-
-
+if __name__ == '__main__':
+    main()
+ 
