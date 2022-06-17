@@ -44,11 +44,11 @@ class LSTMAnomaly:
 
 
     def setup(self):
-        eprint("call setup")
+        print("call setup")
 
     def predict(self):
 
-        eprint("call predict")
+        print("call predict")
         configs = json.load(open('config_new.json', 'r'))
         if not os.path.exists(configs['model']['save_dir']): os.makedirs(configs['model']['save_dir'])
 
@@ -61,10 +61,10 @@ class LSTMAnomaly:
 
         model = Model()
         model.build_model(configs)
-        x, y = data.get_train_data(
-            seq_len=configs['data']['sequence_length'],
-            normalise=configs['data']['normalise']
-        )
+        #x, y = data.get_train_data(
+        #    seq_len=configs['data']['sequence_length'],
+        #    normalise=configs['data']['normalise']
+        #)
         model.load_model('longlong.h5')
 
         x_test, y_test = data.get_test_data(
