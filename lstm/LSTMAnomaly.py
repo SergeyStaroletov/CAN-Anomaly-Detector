@@ -18,7 +18,9 @@ def plot_results(predicted_data, true_data):
     ax.plot(true_data, label='True Data')
     plt.plot(predicted_data, label='Prediction')
     plt.legend()
-    plt.savefig('series.png')
+    import time
+    timestr = time.strftime("%Y%m%d-%H%M%S")
+    plt.savefig(timestr+'_series.png')
     # plt.show()
 
 

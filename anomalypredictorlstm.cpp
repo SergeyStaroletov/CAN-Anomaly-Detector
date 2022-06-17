@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFile>
 #include <QBuffer>
+#include <QProcess>
 
 void AnomalyPredictorLSTM::createCSVFile() {
   buffer.open(QBuffer::ReadWrite);
@@ -18,6 +19,7 @@ AnomalyPredictorLSTM::AnomalyPredictorLSTM() {
  currentPoints = 0;
   // initialize python embedding
 
+  /*
   Py_Initialize();
   qDebug() << "python init ok";
 
@@ -80,7 +82,7 @@ AnomalyPredictorLSTM::AnomalyPredictorLSTM() {
   }
 
   Py_DECREF(pValue);
-
+  */
 
   createCSVFile();
 }
@@ -89,6 +91,11 @@ void AnomalyPredictorLSTM::getNewDataToPredict(CarState carstate) {
   // store all needed data into an input csv file
   mut.lock();
   currentPoints++;
+
+  QProcess pyproc;
+
+
+
 
   QString timestamp = QDateTime::fromMSecsSinceEpoch(carstate.timestamp)
                           .toString("yyyy-MM-dd HH:mm:ss.zzz");
@@ -124,6 +131,10 @@ void AnomalyPredictorLSTM::getNewDataToPredict(CarState carstate) {
     qDebug() << "!!! RUN predict  !!!";
     busy = true;
 
+    pyproc.start("python", QStringList() << "LSTMAnomaly.py");
+    pyproc.waitForFinished();
+
+    /*
     PyObject *pValue = PyObject_CallMethod(pInstance, "predict", NULL);
 
     if (pValue) {
@@ -155,6 +166,7 @@ void AnomalyPredictorLSTM::getNewDataToPredict(CarState carstate) {
 
         exit(1);
     }
+    */
     busy = false;
     qDebug() << "!!! DONE predict  !!!";
 
